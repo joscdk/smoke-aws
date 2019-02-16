@@ -1391,8 +1391,8 @@ public struct BlockDeviceMapping: Codable, Equatable {
     }
 
     enum CodingKeys: String, CodingKey {
-        case deviceName
-        case ebs
+        case deviceName = "DeviceName"
+        case ebs = "Ebs"
         case noDevice
         case virtualName
     }
@@ -11597,12 +11597,12 @@ public struct EbsBlockDevice: Codable, Equatable {
     }
 
     enum CodingKeys: String, CodingKey {
-        case deleteOnTermination
+        case deleteOnTermination = "DeleteOnTermination"
         case encrypted
         case iops
         case kmsKeyId = "KmsKeyId"
         case snapshotId
-        case volumeSize
+        case volumeSize = "VolumeSize"
         case volumeType
     }
 
@@ -21071,7 +21071,7 @@ public struct RunInstancesRequest: Codable, Equatable {
         case cpuOptions = "CpuOptions"
         case creditSpecification = "CreditSpecification"
         case disableApiTermination
-        case dryRun
+        case dryRun = "DryRun"
         case ebsOptimized
         case elasticGpuSpecification = "ElasticGpuSpecification"
         case elasticInferenceAccelerators = "ElasticInferenceAccelerator"
@@ -23050,8 +23050,8 @@ public struct Tag: Codable, Equatable {
     }
 
     enum CodingKeys: String, CodingKey {
-        case key
-        case value
+        case key = "Key"
+        case value = "Value"
     }
 
     public func validate() throws {
@@ -23096,7 +23096,7 @@ public struct TagSpecification: Codable, Equatable {
     }
 
     enum CodingKeys: String, CodingKey {
-        case resourceType
+        case resourceType = "ResourceType"
         case tags = "Tag"
     }
 
