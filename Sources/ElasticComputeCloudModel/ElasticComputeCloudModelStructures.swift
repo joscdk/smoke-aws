@@ -1087,7 +1087,7 @@ public struct AttributeBooleanValue: Codable, Equatable {
     }
 
     enum CodingKeys: String, CodingKey {
-        case value
+        case value = "Value"
     }
 
     public func validate() throws {
@@ -4905,9 +4905,9 @@ public struct CreateVpcRequest: Codable, Equatable {
     }
 
     enum CodingKeys: String, CodingKey {
-        case amazonProvidedIpv6CidrBlock
+        case amazonProvidedIpv6CidrBlock = "AmazonProvidedIpv6CidrBlock"
         case cidrBlock = "CidrBlock"
-        case dryRun
+        case dryRun = "DryRun"
         case instanceTenancy
     }
 
@@ -17232,7 +17232,7 @@ public struct ModifySubnetAttributeRequest: Codable, Equatable {
     enum CodingKeys: String, CodingKey {
         case assignIpv6AddressOnCreation = "AssignIpv6AddressOnCreation"
         case mapPublicIpOnLaunch = "MapPublicIpOnLaunch"
-        case subnetId
+        case subnetId = "SubnetId"
     }
 
     public func validate() throws {
@@ -17395,7 +17395,7 @@ public struct ModifyVpcAttributeRequest: Codable, Equatable {
     enum CodingKeys: String, CodingKey {
         case enableDnsHostnames = "EnableDnsHostnames"
         case enableDnsSupport = "EnableDnsSupport"
-        case vpcId
+        case vpcId = "VpcId"
     }
 
     public func validate() throws {
