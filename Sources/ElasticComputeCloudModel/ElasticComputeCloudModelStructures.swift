@@ -23042,16 +23042,24 @@ public struct SuccessfulInstanceCreditSpecificationItem: Codable, Equatable {
 public struct Tag: Codable, Equatable {
     public var key: String?
     public var value: String?
+    public var responseKey: String?
+    public var responseValue: String?
 
     public init(key: String? = nil,
-                value: String? = nil) {
+                value: String? = nil,
+                responseKey: String? = nil,
+                responseValue: String? = nil) {
         self.key = key
         self.value = value
+        self.responseKey = responseKey
+        self.responseValue = responseValue
     }
 
     enum CodingKeys: String, CodingKey {
         case key = "Key"
         case value = "Value"
+        case responseKey = "key"
+        case responseValue = "value"
     }
 
     public func validate() throws {
