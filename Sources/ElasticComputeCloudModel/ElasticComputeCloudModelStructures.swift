@@ -963,8 +963,8 @@ public struct AttachInternetGatewayRequest: Codable, Equatable {
 
     enum CodingKeys: String, CodingKey {
         case dryRun
-        case internetGatewayId
-        case vpcId
+        case internetGatewayId = "InternetGatewayId"
+        case vpcId = "VpcId"
     }
 
     public func validate() throws {
@@ -4133,15 +4133,15 @@ public struct CreateRouteRequest: Codable, Equatable {
     }
 
     enum CodingKeys: String, CodingKey {
-        case destinationCidrBlock
+        case destinationCidrBlock = "DestinationCidrBlock"
         case destinationIpv6CidrBlock
         case dryRun
         case egressOnlyInternetGatewayId
-        case gatewayId
+        case gatewayId = "GatewayId"
         case instanceId
         case natGatewayId
         case networkInterfaceId
-        case routeTableId
+        case routeTableId = "RouteTableId"
         case transitGatewayId = "TransitGatewayId"
         case vpcPeeringConnectionId
     }
@@ -8131,7 +8131,7 @@ public struct DescribeInstancesRequest: Codable, Equatable {
         case dryRun
         case filters = "Filter"
         case instanceIds = "InstanceId"
-        case maxResults
+        case maxResults = "MaxResults"
         case nextToken
     }
 
@@ -15245,12 +15245,12 @@ public struct IpPermission: Codable, Equatable {
     }
 
     enum CodingKeys: String, CodingKey {
-        case fromPort
-        case ipProtocol
-        case ipRanges
-        case ipv6Ranges
-        case prefixListIds
-        case toPort
+        case fromPort = "FromPort"
+        case ipProtocol = "IpProtocol"
+        case ipRanges = "IpRanges"
+        case ipv6Ranges = "Ipv6Ranges"
+        case prefixListIds = "PrefixListIds"
+        case toPort = "ToPort"
         case userIdGroupPairs = "groups"
     }
 
