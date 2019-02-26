@@ -4134,7 +4134,7 @@ public struct CreateRouteRequest: Codable, Equatable {
 
     enum CodingKeys: String, CodingKey {
         case destinationCidrBlock = "DestinationCidrBlock"
-        case destinationIpv6CidrBlock
+        case destinationIpv6CidrBlock = "DestinationIpv6CidrBlock"
         case dryRun
         case egressOnlyInternetGatewayId
         case gatewayId = "GatewayId"
@@ -15303,7 +15303,7 @@ public struct Ipv6Range: Codable, Equatable {
     }
 
     enum CodingKeys: String, CodingKey {
-        case cidrIpv6
+        case cidrIpv6 = "CidrIpv6"
         case description
     }
 
