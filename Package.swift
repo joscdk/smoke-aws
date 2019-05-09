@@ -92,7 +92,6 @@ let package = Package(
         .package(url: "https://github.com/IBM-Swift/LoggerAPI.git", .upToNextMajor(from: "1.0.0")),
         .package(url: "https://github.com/LiveUI/XMLCoding.git", .upToNextMajor(from: "0.4.0")),
         .package(url: "https://github.com/amzn/smoke-http.git", .upToNextMajor(from: "0.7.0")),
-        .package(url: "https://github.com/vapor/crypto.git", .upToNextMajor(from: "3.3.0")),
     ],
     targets: [
         .target(
@@ -162,7 +161,7 @@ let package = Package(
             name: "SmokeAWSHttp",
             dependencies: ["LoggerAPI", "NIO", "NIOHTTP1", "NIOOpenSSL",
                            "SmokeAWSCore", "SmokeHTTPClient", "QueryCoding",
-                           "HTTPPathCoding", "HTTPHeadersCoding", "Crypto"]),
+                           "HTTPPathCoding", "HTTPHeadersCoding"]),
         .testTarget(
             name: "S3ClientTests",
             dependencies: ["S3Client"]),
