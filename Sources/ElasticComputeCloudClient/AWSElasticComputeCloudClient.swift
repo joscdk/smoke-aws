@@ -69,15 +69,18 @@ public struct AWSElasticComputeCloudClient: ElasticComputeCloudClientProtocol {
                 contentType: String = "application/octet-stream",
                 apiVersion: String = "2016-11-15",
                 connectionTimeoutSeconds: Int = 10,
-                retryConfiguration: HTTPClientRetryConfiguration = .default) {
+                retryConfiguration: HTTPClientRetryConfiguration = .default,
+                eventLoopProvider: HTTPClient.EventLoopProvider = .spawnNewThreads) {
         let clientDelegate = XMLAWSHttpClientDelegate<ElasticComputeCloudError>(
-            outputListDecodingStrategy: .collapseListUsingItemTag("item"))
+            outputListDecodingStrategy: .collapseListUsingItemTag("item"), 
+            inputQueryKeyEncodeTransformStrategy: .capitalizeFirstCharacter)
 
         self.httpClient = HTTPClient(endpointHostName: endpointHostName,
                                      endpointPort: endpointPort,
                                      contentType: contentType,
                                      clientDelegate: clientDelegate,
-                                     connectionTimeoutSeconds: connectionTimeoutSeconds)
+                                     connectionTimeoutSeconds: connectionTimeoutSeconds,
+                                     eventLoopProvider: eventLoopProvider)
         self.awsRegion = awsRegion
         self.service = service
         self.target = nil
@@ -17112,6 +17115,70 @@ public struct AWSElasticComputeCloudClient: ElasticComputeCloudClientProtocol {
         let requestInput = QueryWrapperHTTPRequestInput(
             wrappedInput: wrappedInput,
             action: ElasticComputeCloudModelOperations.modifyInstanceCreditSpecification.rawValue,
+            version: apiVersion)
+
+        return try httpClient.executeSyncRetriableWithOutput(
+            endpointPath: "/",
+            httpMethod: .POST,
+            input: requestInput,
+            handlerDelegate: handlerDelegate,
+            retryConfiguration: retryConfiguration,
+            retryOnError: retryOnErrorProvider)
+    }
+
+    /**
+     Invokes the ModifyInstanceEventStartTime operation returning immediately and passing the response to a callback.
+
+     - Parameters:
+         - input: The validated ModifyInstanceEventStartTimeRequest object being passed to this operation.
+         - completion: The ModifyInstanceEventStartTimeResult object or an error will be passed to this 
+           callback when the operation is complete. The ModifyInstanceEventStartTimeResult
+           object will be validated before being returned to caller.
+     */
+    public func modifyInstanceEventStartTimeAsync(input: ElasticComputeCloudModel.ModifyInstanceEventStartTimeRequest, completion: @escaping (HTTPResult<ElasticComputeCloudModel.ModifyInstanceEventStartTimeResult>) -> ()) throws {
+        let handlerDelegate = AWSClientChannelInboundHandlerDelegate(
+                    credentialsProvider: credentialsProvider,
+                    awsRegion: awsRegion,
+                    service: service,
+                    target: target)
+        
+        let wrappedInput = ModifyInstanceEventStartTimeOperationHTTPRequestInput(encodable: input)
+        
+        let requestInput = QueryWrapperHTTPRequestInput(
+            wrappedInput: wrappedInput,
+            action: ElasticComputeCloudModelOperations.modifyInstanceEventStartTime.rawValue,
+            version: apiVersion)
+
+        _ = try httpClient.executeAsyncRetriableWithOutput(
+            endpointPath: "/",
+            httpMethod: .POST,
+            input: requestInput,
+            completion: completion,
+            handlerDelegate: handlerDelegate,
+            retryConfiguration: retryConfiguration,
+            retryOnError: retryOnErrorProvider)
+    }
+
+    /**
+     Invokes the ModifyInstanceEventStartTime operation waiting for the response before returning.
+
+     - Parameters:
+         - input: The validated ModifyInstanceEventStartTimeRequest object being passed to this operation.
+     - Returns: The ModifyInstanceEventStartTimeResult object to be passed back from the caller of this operation.
+         Will be validated before being returned to caller.
+     */
+    public func modifyInstanceEventStartTimeSync(input: ElasticComputeCloudModel.ModifyInstanceEventStartTimeRequest) throws -> ElasticComputeCloudModel.ModifyInstanceEventStartTimeResult {
+        let handlerDelegate = AWSClientChannelInboundHandlerDelegate(
+                    credentialsProvider: credentialsProvider,
+                    awsRegion: awsRegion,
+                    service: service,
+                    target: target)
+        
+        let wrappedInput = ModifyInstanceEventStartTimeOperationHTTPRequestInput(encodable: input)
+        
+        let requestInput = QueryWrapperHTTPRequestInput(
+            wrappedInput: wrappedInput,
+            action: ElasticComputeCloudModelOperations.modifyInstanceEventStartTime.rawValue,
             version: apiVersion)
 
         return try httpClient.executeSyncRetriableWithOutput(

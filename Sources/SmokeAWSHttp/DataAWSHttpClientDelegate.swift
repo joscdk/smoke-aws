@@ -22,6 +22,7 @@ import SmokeAWSCore
 import QueryCoding
 import HTTPHeadersCoding
 import HTTPPathCoding
+import XMLCoding
 import LoggerAPI
 
 enum DataAWSHttpClientDelegateError: Error {
@@ -47,10 +48,9 @@ public struct DataAWSHttpClientDelegate<ErrorType: Error & Decodable>: HTTPClien
         }
         
         // Convert bodyData to a debug string only if debug logging is enabled
-        Log.debug("Attempting to decode error data into JSON: \(bodyData.debugString)")
+        Log.debug("Attempting to decode error data into XML: \(bodyData.debugString)")
         
-        // attempt to get an error of Error type by decoding the body data
-        return try JSONDecoder.awsCompatibleDecoder.decode(ErrorType.self, from: bodyData)
+        return try ErrorWrapper<ErrorType>.errorFromBodyData(errorType: ErrorType.self, bodyData: bodyData)
     }
     
     public func encodeInputAndQueryString<InputType>(
@@ -125,7 +125,7 @@ public struct DataAWSHttpClientDelegate<ErrorType: Error & Decodable>: HTTPClien
     public func encodeInputAndQueryString<InputType: Encodable>(input: InputType, httpPath: String) throws
         -> (pathWithQuery: String, body: Data) {
             // there is no query; encode the body as a JSON payload
-            return (pathWithQuery: httpPath, body: try JSONEncoder.awsCompatibleEncoder.encode(input))
+            return (pathWithQuery: httpPath, body: try JSONEncoder.awsCompatibleEncoder().encode(input))
     }
     
     public func decodeOutput<OutputType>(output: Data?,

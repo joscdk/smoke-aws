@@ -22,16 +22,19 @@
 import Foundation
 import LoggerAPI
 
-private let dashboardInvalidInputIdentity = "DashboardInvalidInputError"
-private let dashboardNotFoundIdentity = "DashboardNotFoundError"
-private let internalServiceIdentity = "InternalServiceFault"
-private let invalidFormatIdentity = "InvalidFormatFault"
+private let concurrentModificationIdentity = "ConcurrentModificationException"
+private let dashboardInvalidInputIdentity = "InvalidParameterInput"
+private let dashboardNotFoundIdentity = "ResourceNotFound"
+private let internalServiceIdentity = "InternalServiceError"
+private let invalidFormatIdentity = "InvalidFormat"
 private let invalidNextTokenIdentity = "InvalidNextToken"
-private let invalidParameterCombinationIdentity = "InvalidParameterCombinationException"
-private let invalidParameterValueIdentity = "InvalidParameterValueException"
-private let limitExceededIdentity = "LimitExceededFault"
-private let missingRequiredParameterIdentity = "MissingRequiredParameterException"
+private let invalidParameterCombinationIdentity = "InvalidParameterCombination"
+private let invalidParameterValueIdentity = "InvalidParameterValue"
+private let limitExceededIdentity = "LimitExceeded"
+private let missingRequiredParameterIdentity = "MissingParameter"
 private let resourceNotFoundIdentity = "ResourceNotFound"
+private let resourceNotFoundExceptionIdentity = "ResourceNotFoundException"
+private let __accessDeniedIdentity = "AccessDenied"
 
 public enum CloudWatchCodingError: Swift.Error {
     case unknownError
@@ -40,6 +43,7 @@ public enum CloudWatchCodingError: Swift.Error {
 }
 
 public enum CloudWatchError: Swift.Error, Decodable {
+    case concurrentModification(ConcurrentModificationException)
     case dashboardInvalidInput(DashboardInvalidInputError)
     case dashboardNotFound(DashboardNotFoundError)
     case internalService(InternalServiceFault)
@@ -50,22 +54,27 @@ public enum CloudWatchError: Swift.Error, Decodable {
     case limitExceeded(LimitExceededFault)
     case missingRequiredParameter(MissingRequiredParameterException)
     case resourceNotFound(ResourceNotFound)
-    
+    case resourceNotFoundException(ResourceNotFoundException)
+    case accessDenied(message: String?)
+
     enum CodingKeys: String, CodingKey {
         case type = "Code"
         case message = "Message"
     }
-    
+
     public init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)
         var errorReason = try values.decode(String.self, forKey: .type)
         let errorMessage = try values.decodeIfPresent(String.self, forKey: .message)
-    
+        
         if let index = errorReason.index(of: "#") {
             errorReason = String(errorReason[errorReason.index(index, offsetBy: 1)...])
         }
-    
+
         switch errorReason {
+        case concurrentModificationIdentity:
+            let errorPayload = try ConcurrentModificationException(from: decoder)
+            self = CloudWatchError.concurrentModification(errorPayload)
         case dashboardInvalidInputIdentity:
             let errorPayload = try DashboardInvalidInputError(from: decoder)
             self = CloudWatchError.dashboardInvalidInput(errorPayload)
@@ -96,6 +105,11 @@ public enum CloudWatchError: Swift.Error, Decodable {
         case resourceNotFoundIdentity:
             let errorPayload = try ResourceNotFound(from: decoder)
             self = CloudWatchError.resourceNotFound(errorPayload)
+        case resourceNotFoundExceptionIdentity:
+            let errorPayload = try ResourceNotFoundException(from: decoder)
+            self = CloudWatchError.resourceNotFoundException(errorPayload)
+        case __accessDeniedIdentity:
+            self = .accessDenied(message: errorMessage)
         default:
             throw CloudWatchCodingError.unrecognizedError(errorReason, errorMessage)
         }

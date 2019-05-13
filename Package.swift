@@ -85,13 +85,19 @@ let package = Package(
         .library(
             name: "SmokeAWSHttp",
             targets: ["SmokeAWSHttp"]),
+        .library(
+            name: "RDSClient",
+            targets: ["RDSClient"]),
+        .library(
+            name: "RDSModel",
+            targets: ["RDSModel"])
     ],
     dependencies: [
         .package(url: "https://github.com/apple/swift-nio.git", from: "1.8.0"),
         .package(url: "https://github.com/apple/swift-nio-ssl.git", from: "1.0.0"),
         .package(url: "https://github.com/IBM-Swift/LoggerAPI.git", .upToNextMajor(from: "1.0.0")),
         .package(url: "https://github.com/LiveUI/XMLCoding.git", .upToNextMajor(from: "0.4.0")),
-        .package(url: "https://github.com/amzn/smoke-http.git", .upToNextMajor(from: "0.7.0")),
+        .package(url: "https://github.com/amzn/smoke-http.git", .upToNextMajor(from: "1.0.0")),
     ],
     targets: [
         .target(
@@ -162,8 +168,30 @@ let package = Package(
             dependencies: ["LoggerAPI", "NIO", "NIOHTTP1", "NIOOpenSSL",
                            "SmokeAWSCore", "SmokeHTTPClient", "QueryCoding",
                            "HTTPPathCoding", "HTTPHeadersCoding"]),
+        .target(
+            name: "RDSClient",
+            dependencies: ["RDSModel", "SmokeAWSHttp"]),
+        .target(
+            name: "RDSModel",
+            dependencies: ["LoggerAPI"]),
         .testTarget(
             name: "S3ClientTests",
             dependencies: ["S3Client"]),
+        .testTarget(
+            name: "SimpleQueueClientTests",
+            dependencies: ["SimpleQueueClient"]),
+        .testTarget(
+            name: "SecurityTokenClientTests",
+            dependencies: ["SecurityTokenClient"]),
+        .testTarget(
+            name: "SimpleNotificationClientTests",
+            dependencies: ["SimpleNotificationClient"]),
+        .testTarget(
+            name: "ElasticComputeCloudClientTests",
+            dependencies: ["ElasticComputeCloudClient"]),
+        .testTarget(
+            name: "RDSClientTests",
+            dependencies: ["RDSClient"]),
+        
     ]
 )

@@ -40,6 +40,7 @@ private let serverIdentity = "ServerException"
 private let serviceNotActiveIdentity = "ServiceNotActiveException"
 private let serviceNotFoundIdentity = "ServiceNotFoundException"
 private let targetNotFoundIdentity = "TargetNotFoundException"
+private let taskSetNotFoundIdentity = "TaskSetNotFoundException"
 private let unsupportedFeatureIdentity = "UnsupportedFeatureException"
 private let updateInProgressIdentity = "UpdateInProgressException"
 
@@ -68,23 +69,24 @@ public enum ElasticContainerError: Swift.Error, Decodable {
     case serviceNotActive(ServiceNotActiveException)
     case serviceNotFound(ServiceNotFoundException)
     case targetNotFound(TargetNotFoundException)
+    case taskSetNotFound(TaskSetNotFoundException)
     case unsupportedFeature(UnsupportedFeatureException)
     case updateInProgress(UpdateInProgressException)
-    
+
     enum CodingKeys: String, CodingKey {
         case type = "__type"
         case message = "message"
     }
-    
+
     public init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)
         var errorReason = try values.decode(String.self, forKey: .type)
         let errorMessage = try values.decodeIfPresent(String.self, forKey: .message)
-    
+        
         if let index = errorReason.index(of: "#") {
             errorReason = String(errorReason[errorReason.index(index, offsetBy: 1)...])
         }
-    
+
         switch errorReason {
         case accessDeniedIdentity:
             let errorPayload = try AccessDeniedException(from: decoder)
@@ -140,6 +142,9 @@ public enum ElasticContainerError: Swift.Error, Decodable {
         case targetNotFoundIdentity:
             let errorPayload = try TargetNotFoundException(from: decoder)
             self = ElasticContainerError.targetNotFound(errorPayload)
+        case taskSetNotFoundIdentity:
+            let errorPayload = try TaskSetNotFoundException(from: decoder)
+            self = ElasticContainerError.taskSetNotFound(errorPayload)
         case unsupportedFeatureIdentity:
             let errorPayload = try UnsupportedFeatureException(from: decoder)
             self = ElasticContainerError.unsupportedFeature(errorPayload)
